@@ -1,0 +1,335 @@
+﻿@model List<MyAcademy_MVC_CodeFirst.Data.Entities.Product>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="ai-container">
+    <div class="ai-header">
+        <div class="ai-header-content">
+            <div class="ai-icon-wrapper">
+                <svg class="ai-header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M4 6h16M4 12h16M4 18h16" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </div>
+            <div>
+                <h1 class="ai-title">Listele</h1>
+                <p class="ai-subtitle">Tüm kayıtları görüntüleyin ve yönetin</p>
+            </div>
+        </div>
+        <a href="/Admin/Product/CreateProduct" class="ai-btn-primary">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M12 5v14m7-7H5" stroke-width="2.5" stroke-linecap="round" />
+            </svg>
+            Yeni Ekle
+        </a>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="ai-table-container">
+            <div class="ai-table-wrapper">
+                <table class="ai-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 80px;">ID</th>
+                            <th>Görsel</th>
+                            <th>Ad</th>
+                            <th>Açıklama</th>
+                            <th>Fiyat</th>
+                            <th>Kategori</th>
+                            <th style="width: 200px; text-align: right;">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>#@item.Id</td>
+                                <td><img src="@item.ImageUrl" style="height:75px;width:75px"/></td>
+                                <td>
+                                    <span class="row-name">@item.Name</span>
+                                </td>
+                                <td>@item.Description</td>
+                                <td>@item.Price</td>
+                                <td>@item.Category.Name</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a href="/Admin/Product/UpdateProduct/@item.Id" asp-route-id="@item.Id" class="btn-action btn-edit" title="Düzenle">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
+                                            Düzenle
+                                        </a>
+                                        <a href="/Admin/Product/DeleteProduct/@item.Id" asp-route-id="@item.Id" class="btn-action btn-delete" title="Sil" onclick="return confirm('Bu kaydı silmek istediğinize emin misiniz?');">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /><line x1="10" y1="11" x2="10" y2="17" /><line x1="14" y1="11" x2="14" y2="17" /></svg>
+                                            Sil
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="ai-empty-state">
+            <div class="empty-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+            <h3>Henüz Kayıt Yok</h3>
+            <p>Veritabanında görüntülenecek veri bulunamadı.<br>Yeni kayıt eklemek için yukarıdaki butonu kullanın.</p>
+        </div>
+    }
+</div>
+
+<style>
+    /* Ana Konteyner */
+    .ai-container {
+        min-height: 100vh;
+        /* Container padding ve layout ayarları */
+        background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+        margin: -30px -45px -100px -45px; /* Layout taşmaları için */
+        padding: 60px 40px 100px 40px;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    /* Header */
+    .ai-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .ai-header-content {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .ai-icon-wrapper {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+    }
+
+    .ai-header-icon {
+        width: 30px;
+        height: 30px;
+        color: white;
+    }
+
+    .ai-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: white;
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    .ai-subtitle {
+        color: rgba(255, 255, 255, 0.6);
+        margin: 5px 0 0 0;
+        font-size: 0.95rem;
+    }
+
+    /* Primary Button */
+    .ai-btn-primary {
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        border: none;
+        padding: 12px 24px;
+        border-radius: 12px;
+        color: white;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+    }
+
+        .ai-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5);
+            color: white;
+        }
+
+    /* Tablo Alanı */
+    .ai-table-container {
+        background: rgba(30, 41, 59, 0.4);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+    }
+
+    .ai-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .ai-table {
+        width: 100%;
+        border-collapse: collapse;
+        white-space: nowrap;
+    }
+
+        .ai-table thead {
+            background: rgba(59, 130, 246, 0.08);
+        }
+
+        .ai-table th {
+            padding: 20px 25px;
+            text-align: left;
+            color: #93c5fd;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .ai-table td {
+            padding: 20px 25px;
+            color: rgba(255, 255, 255, 0.9);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            vertical-align: middle;
+        }
+
+        .ai-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .ai-table tr {
+            transition: background 0.2s ease;
+        }
+
+            .ai-table tr:hover {
+                background: rgba(255, 255, 255, 0.03);
+            }
+
+    .row-name {
+        font-weight: 500;
+        font-size: 1.05rem;
+    }
+
+    /* İşlem Butonları */
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+    }
+
+    .btn-action {
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-weight: 500;
+        text-decoration: none;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s ease;
+    }
+
+        .btn-action svg {
+            width: 14px;
+            height: 14px;
+        }
+
+    .btn-edit {
+        background: rgba(59, 130, 246, 0.15);
+        color: #60a5fa;
+        border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+        .btn-edit:hover {
+            background: rgba(59, 130, 246, 0.25);
+            color: #93c5fd;
+            transform: translateY(-1px);
+        }
+
+    .btn-delete {
+        background: rgba(239, 68, 68, 0.15);
+        color: #f87171;
+        border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+        .btn-delete:hover {
+            background: rgba(239, 68, 68, 0.25);
+            color: #fca5a5;
+            transform: translateY(-1px);
+        }
+
+    /* Boş Durum */
+    .ai-empty-state {
+        text-align: center;
+        padding: 100px 20px;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 20px;
+        border: 2px dashed rgba(255, 255, 255, 0.05);
+    }
+
+    .empty-icon {
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px auto;
+        color: rgba(255, 255, 255, 0.2);
+    }
+
+        .empty-icon svg {
+            width: 40px;
+            height: 40px;
+        }
+
+    .ai-empty-state h3 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        color: white;
+    }
+
+    .ai-empty-state p {
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 1.6;
+    }
+
+    /* Mobil Responsive */
+    @@media (max-width: 768px) {
+        .ai-container {
+            padding: 30px 20px;
+            margin: -15px -15px; /* Layout ayarı mobilde azaltıldı */
+        }
+
+        .ai-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .ai-btn-primary {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .action-buttons {
+            justify-content: flex-start;
+        }
+    }
+</style>
